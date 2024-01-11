@@ -1,5 +1,6 @@
+let listaDeTareas = '';
+
 function hacerLista(){
-    let listaDeTareas = '';
     let contador = 1;
 
     while(true){
@@ -13,7 +14,9 @@ function hacerLista(){
         contador ++;
     }
     
+}
+
+function mostrarLista(){
     alert(listaDeTareas);
 }
 
-hacerLista();
