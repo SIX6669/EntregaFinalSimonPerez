@@ -1,16 +1,19 @@
-let listaDeTareas = '';
-let nuevaTarea;
-let contador = 1;
+function hacerLista(){
+    let listaDeTareas = '';
+    let contador = 1;
 
-while(true){
-    nuevaTarea = prompt('Ingrese una tarea o presione cancelar');
-
-    if(nuevaTarea === null || nuevaTarea === ''){
-        break;
+    while(true){
+       let nuevaTarea = prompt('Ingrese una tarea o presione cancelar');
+    
+        if(nuevaTarea === null || nuevaTarea === ''){
+            break;
+        }
+    
+        listaDeTareas +=`${contador} - ${nuevaTarea}. \n`;
+        contador ++;
     }
-
-    listaDeTareas +=`${contador} - ${nuevaTarea}. \n`;
-    contador ++;
+    
+    alert(listaDeTareas);
 }
-alert(listaDeTareas)
-console.log(listaDeTareas)
+
+hacerLista();
