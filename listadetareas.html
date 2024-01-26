@@ -4,12 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
     <div class="contenedor">
         <h1>Lista de Tareas</h1>
-        <button onclick="hacerLista()">Crear Lista</button>
+    </div>
+    <div class="contenedor">
+        <h1>Tareas Diarias</h1>
+
+        <!-- Task Form -->
+        <form id="taskForm">
+            <label for="taskInput">Add Task:</label>
+            <input type="text" id="taskInput" placeholder="Enter your task">
+            <button type="button" onclick="crearTarea()">Añadir tarea</button>
+        </form>
+
         <button onclick="mostrarLista()">Ver Lista</button>
+        <!-- Task List -->
+        <ul id="taskList"></ul>
+
+        <h1>Fechas Importantes</h1>
+
+        <!-- Calendario -->
+        <div id="calendario"></div>
     </div>
     
 
