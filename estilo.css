@@ -19,9 +19,13 @@ h1 {
     color: #333;
     text-align: center;
 }
-
+h2{
+   text-align: center;
+ }
 form {
     margin-bottom: 20px;
+    display: flex;
+   
 }
 
 label {
@@ -37,11 +41,13 @@ input {
 
 button {
     padding: 8px 15px;
-    background-color: #4caf50;
+    background-color: #a3b7a3;
     color: #13110f;
     border: none;
     cursor: pointer;
+    border-radius: 10px;
 }
+
 
 button:hover {
     background-color: #45a049;
@@ -52,12 +58,21 @@ ul {
     padding: 0;
 }
 
-li {
-    background-color: #dff0d8;
-    padding: 10px;
-    margin-bottom: 5px;
+#taskList li {
+    font-size: 16px; 
+    padding: 15px; 
+    background-image: linear-gradient(to right, rgba(5, 117, 31, 0.665), rgba(20, 222, 67, 0.665));
+    margin-bottom: 10px; 
+    border-radius: 10px;
+    text-align: left; 
 }
 
+#taskList li button {
+    padding: 8px 12px; 
+    border-radius: 5px;
+    right: 10px;
+    
+}
 #calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -68,4 +83,13 @@ li {
     text-align: center;
     padding: 10px;
     background-color: #e0e0e0;
+}
+
+#markedList li {
+    font-size: 16px; 
+    padding: 15px; 
+    background-image: linear-gradient(to right, rgba(44, 8, 127, 0.665), rgba(173, 136, 223, 0.665));
+    margin-bottom: 10px; 
+    border-radius: 10px;
+    text-align: left; 
 }

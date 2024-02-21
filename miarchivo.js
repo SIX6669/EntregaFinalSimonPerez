@@ -6,12 +6,27 @@ class Tarea {
     }
 }
 
+window.onload = function()  {
+    let tareasGuardadas = localStorage.getItem("Lista de Tareas");
+    listaDeTareas = tareasGuardadas ? JSON.parse(tareasGuardadas) : [];
+    
+    let tareasCompletadas = localStorage.getItem("Tareas Marcadas");    
+    tareasMarcadas = tareasCompletadas ? JSON.parse(tareasCompletadas) : [];
+    
+    mostrarTareaMarcada();
+}
+
 let listaDeTareas = [];
 
 let inputTarea = document.getElementById("inputTarea");
 let addTaskButton = document.getElementById("addTaskButton");
 let showListButton = document.getElementById("showListButton");
 
+function agrearTarea(){
+    listaDeTareas.push(new Tarea(listaDeTareas.length + 1, inputTarea.value, false));
+    inputTarea.value ="";
+    localStorage.setItem("Lista de Tareas", JSON.stringify(listaDeTareas))
+}
 
 inputTarea.addEventListener("keydown", function(event){
     if (event.key==="Enter") {
@@ -24,42 +39,73 @@ addTaskButton.addEventListener("click", function(){
     agrearTarea();
 });
 
-function agrearTarea(){
-    listaDeTareas.push(new Tarea(listaDeTareas.length + 1, inputTarea.value, false));
-    inputTarea.value ="";
-}
-
-
 function mostrarLista(){
   let listaElement = document.getElementById("taskList");
   listaElement.innerHTML = "";
 
+  let tareasGuardadas = localStorage.getItem("Lista de Tareas");
+  if(tareasGuardadas){
+    listaDeTareas = JSON.parse(tareasGuardadas)
+  }
+
   listaDeTareas.forEach(t =>{
+    let tareaDiv = document.createElement("div")
     let tareaElement = document.createElement("li");
     tareaElement.textContent = t.nombre;
-    listaElement.appendChild(tareaElement);
+    let botonMarcado = document.createElement("button");
+    botonMarcado.textContent = "Completado";
+
+    botonMarcado.addEventListener("click", function(){
+        tareaMarcada(t)
+        listaElement.removeChild(tareaDiv);
+        tareaMarcadaAlLocal();
+        mostrarTareaMarcada()
+    })
+
+    tareaElement.appendChild(botonMarcado);
+    tareaDiv.appendChild(tareaElement);
+    listaElement.appendChild(tareaDiv);
   })
+  
 }
-
-function tareaMarcada(){
-    let tareaNombre = prompt('¿Que tarea completaste?');
-    let tarea = listaDeTareas.find(t => t.nombre === tareaNombre);
-    if(tarea){
-        tarea.completada = true;
-        alert('tarea completada exitosamente');
-    }else{
-        alert('tarea no encontrada');
-    }
-}
-
-function mostrarTareaMarcada(tareaNombre){
-    let tarea = listaDeTareas.find(t => t.nombre === tareaNombre);
-    if(tarea){
-        alert(`La tarea ${tareaNombre} ha sido marcada como completada`);
-    } else {
-        alert("Tarea no encontrada");
-    }
-}
-
 
 showListButton.addEventListener("click",mostrarLista);
+
+let tareasMarcadas = [];
+
+function tareaMarcada(t){
+    let tareaIndex = listaDeTareas.indexOf(t)
+    if(tareaIndex !== -1){
+        listaDeTareas[tareaIndex].completada = true;
+        let tareaMarcada = listaDeTareas.splice(tareaIndex, 1)[0];
+        tareasMarcadas.push(tareaMarcada);
+        localStorage.setItem("Lista de Tareas", JSON.stringify(listaDeTareas));
+        
+    }
+}
+
+function tareaMarcadaAlLocal(){
+    localStorage.setItem("Tareas Marcadas",JSON.stringify(tareasMarcadas))
+}
+
+
+function mostrarTareaMarcada(){
+    let listElement = document.getElementById("markedList");
+    listElement.innerHTML = "";
+
+    let tareasGuardadas = localStorage.getItem("Tareas Marcadas");
+    tareasMarcadas = tareasGuardadas ? JSON.parse(tareasGuardadas) : [];
+      
+    tareasMarcadas.forEach(t =>{
+      let tareaDiv = document.createElement("div");
+      let tareaElement = document.createElement("li");
+      tareaElement.textContent = t.nombre;
+      tareaDiv.appendChild(tareaElement);
+      listElement.appendChild(tareaDiv);
+    }) 
+    
+    
+}
+
+
+
