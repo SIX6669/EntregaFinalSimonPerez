@@ -93,3 +93,14 @@ ul {
     border-radius: 10px;
     text-align: left; 
 }
+/* calendario*/
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 10px;
+}
+.day {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}

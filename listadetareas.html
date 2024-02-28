@@ -25,12 +25,23 @@
 
         <h1>Tareas completadas</h1>
 
-        <!-- Calendario -->
+        <!-- Lista de tareas marcadas -->
         <ul id="markedList"></ul>
+
+        <!--Calendario-->
+
+        <div>
+            <div id="calendar-años" class="calendar"></div>
+            <div id="calendar-meses" class="calendar"></div>
+            <button id="prevMonth">Mes Anterior</button>
+            <button id="nextMonth">Mes Siguiente</button>
+            <div id="calendar-dias" class ="calendar"></div>
+        </div>
+        
     </div>
     
 
-
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
     <script src="miarchivo.js"> </script>
 </body>
 </html>

@@ -107,5 +107,49 @@ function mostrarTareaMarcada(){
     
 }
 
+//Calendario
 
+let DateTime = luxon.DateTime;
+let now = DateTime.local();
+
+let calendarioAño = document.getElementById("calendar-años");
+let calendarioMes = document.getElementById("calendar-meses");
+let calendarioDias = document.getElementById("calendar-dias");
+
+let yearDiv = document.createElement("div");
+yearDiv.className = "year";
+yearDiv.innerText = now.year;
+calendarioAño.appendChild(yearDiv);
+
+let monthDiv = document.createElement("div");
+monthDiv.className = "month";
+monthDiv.innerText = now.monthLong;
+calendarioMes.appendChild(monthDiv);
+
+function updateCalendar(){
+    yearDiv.innerText = now.year;
+    monthDiv.innerText = now.monthLong;
+    calendarioDias.innerHTML="";
+
+    let daysInAMonth = now.daysInMonth;
+
+    for(i = 1; i <=daysInAMonth; i++){
+        let day = document.createElement("div");
+        day.className = "day";
+        day.innerText = i;
+        calendarioDias.appendChild(day);
+    }
+}
+
+updateCalendar();
+
+document.getElementById("prevMonth").addEventListener("click", () =>{
+    now = now.minus({month:1});
+    updateCalendar();
+})
+
+document.getElementById("nextMonth").addEventListener("click",()=>{
+    now = now.plus({months: 1});
+    updateCalendar();
+});
 
