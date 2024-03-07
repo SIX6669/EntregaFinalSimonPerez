@@ -4,20 +4,38 @@ class Tarea {
         this.nombre = nombre;
         this.completada = completada;
     }
+}    
+
+window.onload = async function(){
+    await cargarTareasDesdeLocalStr();
+    mostrarTareaMsarcada();
 }
 
-window.onload = function()  {
-    let tareasGuardadas = localStorage.getItem("Lista de Tareas");
+async function cargarTareasDesdelocalStr(){
+    let tareasGuardadas = await obtenerDesdeLocalStr("Lista de Tareas");
     listaDeTareas = tareasGuardadas ? JSON.parse(tareasGuardadas) : [];
-    
-    let tareasCompletadas = localStorage.getItem("Tareas Marcadas");    
+
+    let tareasCompletadas = await obtenerDesdeLocalStr("Tareas Marcadas");
     tareasMarcadas = tareasCompletadas ? JSON.parse(tareasCompletadas) : [];
-    
-    mostrarTareaMarcada();
+}
+
+function obtenerDesdeLocalStr(clave){
+   return new Promise((res) => {
+    let valor = localStorage.getItem(clave);
+    res(valor);
+   })
+}
+
+function guardrEnLocalStr(clave, valor){
+    new Promise((res)=>
+    {localStorage.setItem(clave, JSON.stringify(valor));
+    res();
+    })
 }
 
 let listaDeTareas = [];
-
+let tareasMarcadas = [];
+//Botones
 let inputTarea = document.getElementById("inputTarea");
 let addTaskButton = document.getElementById("addTaskButton");
 let showListButton = document.getElementById("showListButton");
@@ -25,7 +43,7 @@ let showListButton = document.getElementById("showListButton");
 function agrearTarea(){
     listaDeTareas.push(new Tarea(listaDeTareas.length + 1, inputTarea.value, false));
     inputTarea.value ="";
-    localStorage.setItem("Lista de Tareas", JSON.stringify(listaDeTareas))
+    guardrEnLocalStr("Lista de Tareas", listaDeTareas);
 }
 
 inputTarea.addEventListener("keydown", function(event){
@@ -52,8 +70,13 @@ function mostrarLista(){
     let tareaDiv = document.createElement("div")
     let tareaElement = document.createElement("li");
     tareaElement.textContent = t.nombre;
+
     let botonMarcado = document.createElement("button");
+    botonMarcado.classList.add("btn", "btn-succes");
     botonMarcado.textContent = "Completado";
+    botonMarcado.addEventListener("click",function(){
+        
+    })
 
     botonMarcado.addEventListener("click", function(){
         tareaMarcada(t)
@@ -70,8 +93,6 @@ function mostrarLista(){
 }
 
 showListButton.addEventListener("click",mostrarLista);
-
-let tareasMarcadas = [];
 
 function tareaMarcada(t){
     let tareaIndex = listaDeTareas.indexOf(t)
@@ -139,6 +160,7 @@ function updateCalendar(){
         day.innerText = i;
         calendarioDias.appendChild(day);
     }
+
 }
 
 updateCalendar();
