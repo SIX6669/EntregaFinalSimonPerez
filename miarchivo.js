@@ -8,10 +8,10 @@ class Tarea {
 
 window.onload = async function(){
     await cargarTareasDesdeLocalStr();
-    mostrarTareaMsarcada();
+    mostrarTareaMarcada();
 }
 
-async function cargarTareasDesdelocalStr(){
+async function cargarTareasDesdeLocalStr(){
     let tareasGuardadas = await obtenerDesdeLocalStr("Lista de Tareas");
     listaDeTareas = tareasGuardadas ? JSON.parse(tareasGuardadas) : [];
 
@@ -74,10 +74,6 @@ function mostrarLista(){
     let botonMarcado = document.createElement("button");
     botonMarcado.classList.add("btn", "btn-succes");
     botonMarcado.textContent = "Completado";
-    botonMarcado.addEventListener("click",function(){
-        
-    })
-
     botonMarcado.addEventListener("click", function(){
         tareaMarcada(t)
         listaElement.removeChild(tareaDiv);
@@ -85,6 +81,15 @@ function mostrarLista(){
         mostrarTareaMarcada()
     })
 
+    let botonBorrar = document.createElement("button");
+    botonBorrar.classList.add("btn", "btn-danger");
+    botonBorrar.innerHTML = "Borrar";
+    botonBorrar.addEventListener("click", function(){
+        borrarTarea(t);
+        listaElement.removeChild(tareaDiv);
+    })
+
+    tareaElement.appendChild(botonBorrar);
     tareaElement.appendChild(botonMarcado);
     tareaDiv.appendChild(tareaElement);
     listaElement.appendChild(tareaDiv);
@@ -105,6 +110,14 @@ function tareaMarcada(t){
     }
 }
 
+function borrarTarea(t){
+    let tareaIndex = listaDeTareas.indexOf(t);
+    if(tareaIndex != -1){
+        listaDeTareas.splice(tareaIndex, 1);
+        localStorage.setItem("Lista de Tareas", JSON.stringify(listaDeTareas));
+    }
+}
+
 function tareaMarcadaAlLocal(){
     localStorage.setItem("Tareas Marcadas",JSON.stringify(tareasMarcadas))
 }
@@ -121,14 +134,23 @@ function mostrarTareaMarcada(){
       let tareaDiv = document.createElement("div");
       let tareaElement = document.createElement("li");
       tareaElement.textContent = t.nombre;
+
+      let botonBorrar = document.createElement("button");
+      botonBorrar.classList.add("btn", "btn-danger");
+      botonBorrar.innerHTML = "Borrar"
+
+      botonBorrar.addEventListener("click", function(){
+        borrarTarea(t);
+        listElement.removeChild(tareaDiv);
+      })
+
+      tareaElement.appendChild(botonBorrar);
       tareaDiv.appendChild(tareaElement);
       listElement.appendChild(tareaDiv);
     }) 
     
     
 }
-
-//Calendario
 
 let DateTime = luxon.DateTime;
 let now = DateTime.local();
@@ -147,20 +169,68 @@ monthDiv.className = "month";
 monthDiv.innerText = now.monthLong;
 calendarioMes.appendChild(monthDiv);
 
-function updateCalendar(){
+function updateCalendar() {
     yearDiv.innerText = now.year;
     monthDiv.innerText = now.monthLong;
-    calendarioDias.innerHTML="";
+    calendarioDias.innerHTML = "";
 
     let daysInAMonth = now.daysInMonth;
+    let startingDayOfWeek = now.startOf("month").weekday;
 
-    for(i = 1; i <=daysInAMonth; i++){
-        let day = document.createElement("div");
-        day.className = "day";
-        day.innerText = i;
-        calendarioDias.appendChild(day);
+    const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+
+    // Agregar nombres de los días de la semana
+    for (let i = 0; i < 7; i++) {
+        let dayName = document.createElement("div");
+        dayName.className = "day-name";
+        dayName.innerText = dayNames[i];
+        calendarioDias.appendChild(dayName);
     }
 
+    // Agregar días en blanco antes del primer día del mes
+    for (let i = 0; i < startingDayOfWeek; i++) {
+        let emptyDay = document.createElement("div");
+        emptyDay.className = "empty-day";
+        calendarioDias.appendChild(emptyDay);
+    }
+
+    let orderDays = [];
+    for (let i = 1; i <= daysInAMonth; i++) {
+        orderDays.push(i);
+    }
+
+    orderDays.sort((a, b) => {
+        let dateA = now.set({ day: a });
+        let dateB = now.set({ day: b });
+        return dateA.weekday - dateB.weekday;
+    });
+
+    let counter = 0;
+    for (let i = 1; i <= daysInAMonth; i++) {
+        let day = document.createElement("div");
+        day.className = "day";
+        let date = now.set({ day: i });
+        day.setAttribute("data-date", date.toISODate());
+        if (date.startOf("day") < DateTime.local().startOf("day")) {
+            day.classList.add("violet");
+        } else if (date.startOf("day") > DateTime.local().startOf("day")) {
+            day.classList.add("green");
+        } else {
+            day.classList.add("gray");
+        }
+
+        day.innerText = i;
+        calendarioDias.appendChild(day);
+        counter++;
+    }
+
+    // Rellenar el espacio restante en la fila con días en blanco
+    while (counter % 7 !== 0) {
+        let emptyDay = document.createElement("div");
+        emptyDay.className = "empty-day";
+        calendarioDias.appendChild(emptyDay);
+        counter++;
+    }
 }
 
 updateCalendar();
@@ -174,4 +244,3 @@ document.getElementById("nextMonth").addEventListener("click",()=>{
     now = now.plus({months: 1});
     updateCalendar();
 });
-
