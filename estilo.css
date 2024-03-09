@@ -98,9 +98,28 @@ ul {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-gap: 10px;
+    text-align: center;
 }
 .day {
     border: 1px solid #ccc;
     padding: 10px;
+    text-align: center;
+}
+.violet{
+    background-color: violet;
+}
+.green{
+   background-color: green; 
+}
+.gray{
+    background-color: gray;
+}
+#contenedor-botones{
+    text-align: center;
+}
+#calendar-años{
+    text-align: center;
+}
+#calendar-meses{
     text-align: center;
 }
